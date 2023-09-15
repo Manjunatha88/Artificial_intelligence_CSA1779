@@ -1,0 +1,44 @@
+import heapq
+
+def uniform_cost_search(tree, initial, goal):
+    heap = [(0, initial, [])]
+    visited = set()
+    
+    while heap:
+        cost, current, path = heapq.heappop(heap)
+        
+        if current in visited:
+            continue
+        
+        path = path + [current]
+        visited.add(current)
+        
+        if current == goal:
+            return path
+        
+        for neighbor, neighbor_cost in tree.get(current, []):
+            if neighbor not in visited:
+                heapq.heappush(heap, (cost + neighbor_cost, neighbor, path))
+    
+    return None
+
+# Example tree representation
+tree = {
+    'S': [('A', 3), ('B', 2)],
+    'A': [('C', 4), ('D', 5)],
+    'B': [('E', 2)],
+    'C': [('G', 6)],
+    'D': [('G', 2)],
+    'E': [('G', 3)],
+    'G': []
+}
+
+initial_node = 'S'
+goal_node = 'G'
+result = uniform_cost_search(tree, initial_node, goal_node)
+
+if result:
+    print("Path found:", result)
+else:
+    print("No path found.")
+ 
